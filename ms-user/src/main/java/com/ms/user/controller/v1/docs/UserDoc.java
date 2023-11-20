@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+
 @Tag(name = "User Controller", description = "API que expones las operaciones CRUD de usuarios")
 public interface UserDoc {
 
@@ -23,6 +25,27 @@ public interface UserDoc {
                     description = "bad request",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    ResponseEntity create(@RequestBody UserDTO userDTO);
+    ResponseEntity create(@Valid @RequestBody UserDTO userDTO);
 
+    @Operation(summary = "Listar usuarios", description = "Esta operacion permite obtener todos los usuarios")
+    @ApiResponses (value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Lista de usuarios ok",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400",
+                    description = "bad request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    ResponseEntity getAll();
+
+    @Operation(summary = "Obtiene un usuario", description = "Esta operacion permite obtener el usuario de acuerdo al id")
+    @ApiResponses (value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Usuario obtenido ok",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400",
+                    description = "bad request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    ResponseEntity getById(String id);
 }
