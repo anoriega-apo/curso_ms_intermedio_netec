@@ -1,6 +1,8 @@
 package com.ms.user.service.impl;
 
+import com.ms.user.config.RestTemplate;
 import com.ms.user.dto.UserDTO;
+import com.ms.user.exception.MyHandleException;
 import com.ms.user.mapper.UserMapper;
 import com.ms.user.model.UserEntity;
 import com.ms.user.repository.UserRepository;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements IUserService {
 
+    private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     public ResponseEntity create(UserDTO userDTO){
         String uuid = UUID.randomUUID().toString();
@@ -32,5 +35,12 @@ public class UserServiceImpl implements IUserService {
     public ResponseEntity getAll() {
         var user=  this.userRepository.findAll();
         return ResponseEntity.ok(user);
+    }
+
+    @Override
+    public ResponseEntity getById(String id) {
+        var user = this.userRepository.findById(id)
+                .orElseThrow( () -> new MyHandleException("Usuario no existe"));
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
